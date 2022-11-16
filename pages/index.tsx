@@ -46,13 +46,14 @@ const ColorsBox = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
 `;
 
+const initialColorOutput: string[] = [];
+
 const Home = () => {
   const [colorInput, setColorInput] = useState("");
   const [colorSubmit, setColorSubmit] = useState("");
-  const [colorOutput, setColorOutput] = useState("");
+  const [colorOutput, setColorOutput] = useState(initialColorOutput);
   const [colorTheory, setColorTheory] = useState("triadic");
-
-  const { typeScale, setTypeScale } = useContext(TypeScaleContext);
+  const { setTypeScale } = useContext(TypeScaleContext);
 
   const handleColorInput = (col: string) => {
     if (colorTheory === "split complementary") {
@@ -74,7 +75,7 @@ const Home = () => {
 
   // desaturate takes colours darker and lighter
   // darken makes a true black - doesnt really work
-
+  console.log($ui.color);
   return (
     <div>
       <Head>

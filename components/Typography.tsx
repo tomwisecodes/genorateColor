@@ -10,42 +10,42 @@ type TextProps = {
 
 type typeProps = {
   size: number;
-  typeScale: number;
+  typeScale: string;
 };
 const typeStyles = css`
-  font-size: ${(props) => {
+  font-size: ${(props: typeProps) => {
     if (props.size === 1) {
       return "1rem";
     }
     if (props.size > 1) {
       const multiplier = props.size - 1;
-      return `${Math.pow(props.typeScale, multiplier)}rem`;
+      return `${Math.pow(parseFloat(props.typeScale), multiplier)}rem`;
     }
   }};
 `;
 
-const H1 = styled.h1<typeProps>`
+const H1 = styled.h1`
   ${typeStyles}
 `;
-const H2 = styled.h2<typeProps>`
+const H2 = styled.h2`
   ${typeStyles}
 `;
-const H3 = styled.h3<typeProps>`
+const H3 = styled.h3`
   ${typeStyles}
 `;
-const H4 = styled.h4<typeProps>`
+const H4 = styled.h4`
   ${typeStyles}
 `;
-const H5 = styled.h5<typeProps>`
+const H5 = styled.h5`
   ${typeStyles}
 `;
-const H6 = styled.h6<typeProps>`
+const H6 = styled.h6`
   ${typeStyles}
 `;
-const P = styled.p<typeProps>`
+const P = styled.p`
   ${typeStyles}
 `;
-const Span = styled.span<typeProps>`
+const Span = styled.span`
   ${typeStyles}
 `;
 const Text = ({ type, size, children }: TextProps) => {
