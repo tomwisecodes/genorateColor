@@ -47,19 +47,19 @@ const Home = () => {
 
   const handleColorInput = (col: string) => {
     if (colorTheory === "split complementary") {
-      setColorOutput($ui.color.complement(col, "split"));
+      setColorOutput($ui.color.complement(col, "split")); // eslint-disable-next-line no-use-before-define
     }
     if (colorTheory === "double complementary") {
-      setColorOutput($ui.color.complement(col, "double"));
+      setColorOutput($ui.color.complement(col, "double")); // eslint-disable-next-line no-use-before-define
     }
     if (colorTheory === "triadic") {
-      setColorOutput($ui.color.triadic(col));
+      setColorOutput($ui.color.triadic(col)); // eslint-disable-next-line no-use-before-define
     }
     if (colorTheory === "tetradic") {
-      setColorOutput($ui.color.tetradic(col));
+      setColorOutput($ui.color.tetradic(col)); // eslint-disable-next-line no-use-before-define
     }
     if (colorTheory === "pentadic") {
-      setColorOutput($ui.color.pentadic(col));
+      setColorOutput($ui.color.pentadic(col)); // eslint-disable-next-line no-use-before-define
     }
   };
   console.log(colorTheory);
