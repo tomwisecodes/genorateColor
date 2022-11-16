@@ -1,8 +1,9 @@
 import Head from "next/head";
 import styled from "styled-components";
 import { $ui } from "../assets/scripts/colors.min.js";
-import { useEffect, useState } from "react";
-
+import { useEffect, useState, useContext } from "react";
+import { TypeScaleContext } from "../context/typeScaleContext";
+import Text from "../components/Typography";
 const Main = styled.main`
   max-width: 1280px;
   margin: auto;
@@ -30,41 +31,49 @@ const ColorForm = styled.div`
 `;
 
 const Section = styled.section`
-  padding: 48px;
+  padding: 24px;
+`;
+
+const GridSection = styled(Section)`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
 `;
 
 const ColorsBox = styled.div`
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
 `;
 
 const Home = () => {
   const [colorInput, setColorInput] = useState("");
   const [colorSubmit, setColorSubmit] = useState("");
   const [colorOutput, setColorOutput] = useState("");
-  const [colorTheory, setColorTheory] = useState("");
+  const [colorTheory, setColorTheory] = useState("triadic");
+
+  const { typeScale, setTypeScale } = useContext(TypeScaleContext);
 
   const handleColorInput = (col: string) => {
     if (colorTheory === "split complementary") {
-      setColorOutput($ui.color.complement(col, "split")); // eslint-disable-next-line no-use-before-define
+      setColorOutput($ui.color.complement(col, "split"));
     }
     if (colorTheory === "double complementary") {
-      setColorOutput($ui.color.complement(col, "double")); // eslint-disable-next-line no-use-before-define
+      setColorOutput($ui.color.complement(col, "double"));
     }
     if (colorTheory === "triadic") {
-      setColorOutput($ui.color.triadic(col)); // eslint-disable-next-line no-use-before-define
+      setColorOutput($ui.color.triadic(col));
     }
     if (colorTheory === "tetradic") {
-      setColorOutput($ui.color.tetradic(col)); // eslint-disable-next-line no-use-before-define
+      setColorOutput($ui.color.tetradic(col));
     }
     if (colorTheory === "pentadic") {
-      setColorOutput($ui.color.pentadic(col)); // eslint-disable-next-line no-use-before-define
+      setColorOutput($ui.color.pentadic(col));
     }
   };
-  console.log(colorTheory);
-  // #23D7FF
-  // #23D7FF// #23D7FF
+
+  // desaturate takes colours darker and lighter
+  // darken makes a true black - doesnt really work
 
   return (
     <div>
@@ -78,37 +87,80 @@ const Home = () => {
         <Section>
           <h1>Generate Colors</h1>
         </Section>
-        <Section>
-          <p>1. Input Colours</p>
-          <ColorForm>
-            <label>
-              Insert colour as hex.
-              <input
-                type="text"
-                value={colorInput}
-                onChange={(e) => setColorInput(e.target.value)}
-              />
-            </label>
-            <label>
-              Choose color theroem.
-              <select onChange={(e) => setColorTheory(e.target.value)}>
-                <option>triadic</option>
-                <option>tetradic</option>
-                <option>pentadic</option>
-                <option>split complementary</option>
-                <option>double complementary</option>
-              </select>
-            </label>
-            <button
-              onClick={() => {
-                handleColorInput(colorInput);
-                setColorSubmit(colorInput);
-              }}
-            >
-              Submit
-            </button>
-          </ColorForm>
-        </Section>
+        <GridSection>
+          <div>
+            <p>1. Input Colours</p>
+            <ColorForm>
+              <label>
+                Insert colour as hex.
+                <input
+                  type="text"
+                  value={colorInput}
+                  onChange={(e) => setColorInput(e.target.value)}
+                />
+              </label>
+              <label>
+                Choose color theroem.
+                <select onChange={(e) => setColorTheory(e.target.value)}>
+                  <option>triadic</option>
+                  <option>tetradic</option>
+                  <option>pentadic</option>
+                  <option>split complementary</option>
+                  <option>double complementary</option>
+                </select>
+              </label>
+              <label>
+                Choose type scale.
+                <select onChange={(e) => setTypeScale(e.target.value)}>
+                  <option value="1.067">1.067 - Minor Second</option>
+                  <option value="1.125">1.125 - Major Second</option>
+                  <option value="1.200">1.200 - Minor Third</option>
+                  <option value="1.250">1.250 - Major Third</option>
+                  <option value="1.333">1.333 - Perfect Fourth</option>
+                  <option value="1.414">1.414 - Augmented Fourth</option>
+                  <option value="1.500">1.500 - Perfect Fifth</option>
+                  <option value="1.618">1.618 - Golden Ratio</option>
+                </select>
+              </label>
+              <button
+                onClick={() => {
+                  handleColorInput(colorInput);
+                  setColorSubmit(colorInput);
+                }}
+              >
+                Submit
+              </button>
+            </ColorForm>
+          </div>
+          <div>
+            {colorOutput && (
+              <>
+                <p>Type Scale</p>
+                <Text size={1} type="p">
+                  hello
+                </Text>
+                <Text size={2} type="p">
+                  hello
+                </Text>
+                <Text size={3} type="p">
+                  hello
+                </Text>
+                <Text size={4} type="p">
+                  hello
+                </Text>
+                <Text size={5} type="p">
+                  hello
+                </Text>
+                <Text size={6} type="p">
+                  hello
+                </Text>
+                <Text size={7} type="p">
+                  hello
+                </Text>
+              </>
+            )}
+          </div>
+        </GridSection>
         {colorSubmit && (
           <Section>
             <p>Submitted</p>
