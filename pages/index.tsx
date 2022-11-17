@@ -4,18 +4,27 @@ import { $ui } from "../assets/scripts/colors.min.js";
 import { useEffect, useState, useContext } from "react";
 import { TypeScaleContext } from "../context/typeScaleContext";
 import Text from "../components/Typography";
+import useContrast from "../helpers/useContrast";
+import useMonoChromatic from "../helpers/useMonoChromatic";
+import tinycolor from "tinycolor2";
+
 const Main = styled.main`
   max-width: 1280px;
   margin: auto;
 `;
 const ColorBlock = styled.div`
   background-color: ${(props) => props.color};
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
   padding: 12px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
+  margin-right: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const ColorForm = styled.div`
@@ -41,9 +50,8 @@ const GridSection = styled(Section)`
 `;
 
 const ColorsBox = styled.div`
-  display: grid;
-  gap: 12px;
-  grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 const initialColorOutput: string[] = [];
@@ -71,11 +79,33 @@ const Home = () => {
     if (colorTheory === "pentadic") {
       setColorOutput($ui.color.pentadic(col));
     }
+    if (colorTheory === "monochromatic") {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      setColorOutput(useMonoChromatic(col));
+    }
   };
 
   // desaturate takes colours darker and lighter
   // darken makes a true black - doesnt really work
-  console.log($ui.color);
+
+  // console.log("this", createMonoArray("#ff0000", 6));
+
+  function contrastChecker(col: string) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    if (useContrast(col, "#000000")[1]) {
+      return "#000000";
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+    } else if (useContrast(col, "#ffffff")[1]) {
+      return "#ffffff";
+    }
+    return "transparent";
+  }
+
+  function showFinalRatio(col: string) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return useContrast(contrastChecker(col), col)[3].toFixed(2);
+  }
+
   return (
     <div>
       <Head>
@@ -86,7 +116,7 @@ const Home = () => {
 
       <Main>
         <Section>
-          <h1>Generate Colors</h1>
+          <h1>Generate Colors </h1>
         </Section>
         <GridSection>
           <div>
@@ -108,6 +138,7 @@ const Home = () => {
                   <option>pentadic</option>
                   <option>split complementary</option>
                   <option>double complementary</option>
+                  <option>monochromatic</option>
                 </select>
               </label>
               <label>
@@ -175,11 +206,18 @@ const Home = () => {
             <p>Colors</p>
             <ColorsBox>
               {colorOutput &&
-                colorOutput.map((col: string, i: number) => (
-                  <ColorBlock key={i} color={col}>
-                    <p>{col}</p>
-                  </ColorBlock>
-                ))}
+                colorOutput.map((col: string, i: number) => {
+                  return (
+                    <ColorBlock key={i} color={col}>
+                      <Text size={2} type="p" color={contrastChecker(col)}>
+                        hex: {col}
+                      </Text>
+                      <Text size={0} type="p" color={contrastChecker(col)}>
+                        Contrast %: {showFinalRatio(col)}
+                      </Text>
+                    </ColorBlock>
+                  );
+                })}
             </ColorsBox>
           </Section>
         )}
